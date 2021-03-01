@@ -12,7 +12,7 @@ You are welcome to visit our website: [StockAI.me](http://stockAI.me/). The main
 
     1.1 Collect the latest tweet regarding the company stock
 
-    1.2 Fetch the tweets using tweeter API
+    1.2 Fetch the tweets using twitter API
     
     1.3 Collect the historical stock data from Yahoo Finance API
 
@@ -42,15 +42,9 @@ Note: If you don't want to take time to crawl data and train the model, you can 
 
 #### 1.1 Download the ticker list from [NASDAQ](http://www.nasdaq.com/screening/companies-by-industry.aspx)
 
-```bash
-$ all_tickers.py 20  # keep the top e.g. 20% marketcap companies
-```
-
 #### 1.2 Use twitter API to crawl tweets from [twitter]()
 
 *Note: you may need over one month to fetch the tweets you want.*
-
-Suppose we find a piece of news about COO Lu Qi Resignation on May.18, 2018 at reuters.com
 
 ![](./imgs/baidu.PNG)
 
@@ -79,61 +73,18 @@ Unify the word format, project word to a word vector, so every sentence results 
 Detail about unifying word format are: lower case, remove punctuation, get rid of stop words, unify tense and singular & plural.
 
 ```bash
-$ ./tokenize_news.py
+$ ./clean.py
 ```
 
-### 3. Train a Bayesian ConvNet to predict the stock price movement. 
-
-Type the following to train a set of robust Bayesian models.
+### 3. Train FBprophet to predict the stock price movement. 
 ```bash
-$ ./main.py -epochs 500 -static False
+$ ./forecast.py
 ```
 
 ### 4. Prediction and analysis
 
-Let's show one example how the thinning models react to Baidu Lu Qi's resignation
-```bash
-$ ./main.py -predict "Top executive behind Baidu's artificial intelligence drive steps aside"
->> Sell
-```
-The prediction makes sense, let's find another one.
+Combine the both Prediction. 
 
-```
-Eli Lilly and Co (LLY.N)
-FRI, JUN 1 2018
-UPDATE 2-Lilly gets U.S. nod for arthritis drug, sets price well below rivals
-* Drug priced at $25,000/year, 60 pct lower to AbbVie's Humira
-```
-
-```bash
-$ ./main.py -predict "UPDATE 2-Lilly gets U.S. nod for arthritis drug  sets price well below rivals"
->> Sell
-```
-
-Lowering down drug prices looks helpful to gain market share in the business, however, they didn't mention too much about the updates of technology, we are inclined to regard it as the virulent price competition, which does not help to the company earnings. Thus it is not a bad decision to sell Eli Lilly stocks.
-
-Next, let's see what the buy options look like:
-
-```
-Alphabet Inc (GOOG.O)
-WED, MAY 30 2018
-Google launches the second app in China, woos top smartphone market
-* BEIJING Alphabet Inc's Google has launched a file managing tool in several Chinese app stores as it 
-* looks for fresh inroads into the world's biggest smartphone market, where most of the internet 
-* giant's top products remain banned.
-```
-
-```bash
-$ ./main.py -predict "Google launches the second app in China  woos top smartphone market"
->> Strong Buy
-```
-
-By now, you have basically understood how the models work, let's use backtesting to examine the performance on the news in the past two weeks.
-```bash
-$ ./main.py -eval True
->> Testing    - loss: 0.6761  acc: 58.07%(41.8/72.0) 83.50%(3.3/3.9) 100.00%(0.0/0.0) 0.00%(0.0/0.0) 
-```
-Note: the predictions are averaged, which explains why we have float numbers. From left to right, the predictions become more and more confident. 58% is actually much higher than my expectation, I believe when tested on a longer time horizon, the performance gets worse. However, as long as the predictions are better than random guesses (50%), you can't lose money betting on a favorable game (assume no trading cost and liquidity issue).
 
 
 ### 5. Future works
