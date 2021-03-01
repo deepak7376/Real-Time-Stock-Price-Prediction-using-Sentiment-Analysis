@@ -1,7 +1,7 @@
 # Real-Time-Stock-Price-Prediction-using-Sentiment-Analysis
 Use natural-language processing (NLP) to predict stock price movement based on Twitter data and historical stock data.
 
-  
+![System Diagram](./src/sys.png) 
 ## Website
 
 You are welcome to visit our website: [StockAI.me](http://stockAI.me/). The main purpose of this project is to build the connection between Natural language processing and stock price prediction based on tweets. 
